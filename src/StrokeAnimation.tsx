@@ -10,9 +10,7 @@ import Animated, {
 import Svg, { Circle, Path } from "react-native-svg";
 
 import CameraIcon from "./CameraIcon";
-
 const AnimatedPath = Animated.createAnimatedComponent(Path);
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 const StrokeAnimation = () => {
   const progress = useSharedValue(0);
@@ -75,7 +73,7 @@ const StrokeAnimation = () => {
                   setLengthForTop(refTop.current!.getTotalLength())
                 }
               />
-              <AnimatedCircle cx="352" cy="412" r="16" fill="#C2071E" />
+              <Circle cx="352" cy="412" r="16" fill="#C2071E" />
               <AnimatedPath
                 stroke="#C2071E"
                 strokeWidth="32"
