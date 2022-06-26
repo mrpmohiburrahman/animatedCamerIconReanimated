@@ -18,38 +18,46 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 const StrokeAnimation = () => {
   const progress = useSharedValue(0);
+  const scaleCamera = useSharedValue(1);
 
   const [lengthForTop, setLengthForTop] = useState(0);
   const [lengthForBottom, setLengthForBottom] = useState(0);
   const [isCameraOn, setIsCameraOn] = useState(false);
+
   const refTop = useRef<Path>(null);
   const refBottom = useRef<Path>(null);
 
-  const animatedPropsForBottom = useAnimatedProps(() => ({
-    strokeDashoffset:
-      lengthForBottom -
-      lengthForBottom * Easing.bezierFn(0.37, 0, 0.63, 1)(progress.value),
-  }));
-  const animatedPropsForTop = useAnimatedProps(() => ({
-    strokeDashoffset:
-      lengthForTop -
-      lengthForTop * Easing.bezierFn(0.37, 0, 0.63, 1)(progress.value),
-  }));
-  const animatedPropsForCircle = useAnimatedProps(() => ({
-    opacity: withSpring(isCameraOn ? 1 : 1, {
-      overshootClamping: true,
+  const animatedProps = {
+    forBottom: useAnimatedProps(() => ({
+      strokeDashoffset:
+        lengthForBottom -
+        lengthForBottom * Easing.bezierFn(0.37, 0, 0.63, 1)(progress.value),
+    })),
+    forTop: useAnimatedProps(() => ({
+      strokeDashoffset:
+        lengthForTop -
+        lengthForTop * Easing.bezierFn(0.37, 0, 0.63, 1)(progress.value),
+    })),
+    forCircle: useAnimatedProps(() => ({
+      opacity: withSpring(isCameraOn ? 1 : 1, {
+        overshootClamping: true,
+      }),
+    })),
+  };
+
+  const animatedStyles = {
+    camera: useAnimatedStyle(() => {
+      return { transform: [{ scale: scaleCamera.value }] };
     }),
-  }));
-  const toggleCamera = () => setIsCameraOn(!isCameraOn);
-  const scaleCamera = useSharedValue(1);
-  const animatedStyles = useAnimatedStyle(() => {
-    return { transform: [{ scale: scaleCamera.value }] };
-  });
+  };
   useEffect(() => {
     progress.value = withSpring(isCameraOn ? 0 : 1, {
       overshootClamping: true,
     });
   }, [progress, isCameraOn]);
+
+  const toggleCamera = () => setIsCameraOn(!isCameraOn);
+
   return (
     <View style={styles.layer}>
       <TouchableOpacity
@@ -60,17 +68,8 @@ const StrokeAnimation = () => {
             overshootClamping: true,
           });
         }}>
-        <View
-          style={{
-            justifyContent: "center",
-          }}>
-          <Animated.View
-            style={[
-              {
-                transform: [{ scale: 1 }],
-              },
-              animatedStyles,
-            ]}>
+        <View style={{ justifyContent: "center" }}>
+          <Animated.View style={animatedStyles.camera}>
             <CameraIcon />
           </Animated.View>
           <View
@@ -87,14 +86,14 @@ const StrokeAnimation = () => {
                 strokeWidth="32"
                 d="M346,405L0,0"
                 strokeDasharray={lengthForTop} // change here
-                animatedProps={animatedPropsForTop}
+                animatedProps={animatedProps.forTop}
                 ref={refTop}
                 onLayout={() =>
                   setLengthForTop(refTop.current!.getTotalLength())
                 }
               />
               <AnimatedCircle
-                animatedProps={animatedPropsForCircle}
+                animatedProps={animatedProps.forCircle}
                 cx="352"
                 cy="412"
                 r="16"
@@ -105,8 +104,7 @@ const StrokeAnimation = () => {
                 strokeWidth="32"
                 d="M360,422L442,512"
                 strokeDasharray={lengthForBottom} // change here
-                strokeDashoffset={animatedPropsForBottom} // change here
-                animatedProps={animatedPropsForBottom}
+                animatedProps={animatedProps.forBottom}
                 ref={refBottom}
                 onLayout={() =>
                   setLengthForBottom(refBottom.current!.getTotalLength())
