@@ -54,9 +54,11 @@ const StrokeAnimation = () => {
     <View style={styles.layer}>
       <TouchableOpacity activeOpacity={1} onPress={toggleCamera}>
         <View style={{ justifyContent: "center" }}>
+          {/* Camer Icon */}
           <Animated.View style={animatedStyles.camera}>
             <CameraIcon />
           </Animated.View>
+          {/* red line */}
           <View style={{ position: "absolute" }}>
             <Svg
               width={130}
