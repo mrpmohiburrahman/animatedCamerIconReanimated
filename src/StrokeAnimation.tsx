@@ -1,9 +1,7 @@
 // @ts-nocheck
-/* eslint-disable max-len */
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, {
-  Easing,
   useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
@@ -29,19 +27,10 @@ const StrokeAnimation = () => {
 
   const animatedProps = {
     forBottom: useAnimatedProps(() => ({
-      strokeDashoffset:
-        lengthForBottom -
-        lengthForBottom * Easing.bezierFn(0.37, 0, 0.63, 1)(progress.value),
+      strokeDashoffset: lengthForBottom - lengthForBottom * progress.value,
     })),
     forTop: useAnimatedProps(() => ({
-      strokeDashoffset:
-        lengthForTop -
-        lengthForTop * Easing.bezierFn(0.37, 0, 0.63, 1)(progress.value),
-    })),
-    forCircle: useAnimatedProps(() => ({
-      opacity: withSpring(isCameraOn ? 1 : 1, {
-        overshootClamping: true,
-      }),
+      strokeDashoffset: lengthForTop - lengthForTop * progress.value,
     })),
   };
 
@@ -68,11 +57,7 @@ const StrokeAnimation = () => {
           <Animated.View style={animatedStyles.camera}>
             <CameraIcon />
           </Animated.View>
-          <View
-            style={{
-              borderColor: "cyan",
-              position: "absolute",
-            }}>
+          <View style={{ position: "absolute" }}>
             <Svg
               width={130}
               height={130}
@@ -88,13 +73,7 @@ const StrokeAnimation = () => {
                   setLengthForTop(refTop.current!.getTotalLength())
                 }
               />
-              <AnimatedCircle
-                animatedProps={animatedProps.forCircle}
-                cx="352"
-                cy="412"
-                r="16"
-                fill="#C2071E"
-              />
+              <AnimatedCircle cx="352" cy="412" r="16" fill="#C2071E" />
               <AnimatedPath
                 stroke="#C2071E"
                 strokeWidth="32"

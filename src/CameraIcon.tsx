@@ -1,11 +1,8 @@
 // @ts-nocheck
-import { View, Text } from "react-native";
 import React from "react";
 import Svg, { Path } from "react-native-svg";
 
 const CameraIcon = (props: any) => {
-  console.log(`[props] === ${JSON.stringify(props)}`);
-
   return (
     <Svg
       width={131}
