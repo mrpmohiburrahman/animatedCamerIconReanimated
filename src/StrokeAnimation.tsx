@@ -54,20 +54,16 @@ const StrokeAnimation = () => {
     progress.value = withSpring(isCameraOn ? 0 : 1, {
       overshootClamping: true,
     });
-  }, [progress, isCameraOn]);
+    scaleCamera.value = withSpring(isCameraOn ? 1.5 : 1, {
+      overshootClamping: true,
+    });
+  }, [progress, isCameraOn, scaleCamera]);
 
   const toggleCamera = () => setIsCameraOn(!isCameraOn);
 
   return (
     <View style={styles.layer}>
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={() => {
-          toggleCamera();
-          scaleCamera.value = withSpring(isCameraOn ? 1 : 1.5, {
-            overshootClamping: true,
-          });
-        }}>
+      <TouchableOpacity activeOpacity={1} onPress={toggleCamera}>
         <View style={{ justifyContent: "center" }}>
           <Animated.View style={animatedStyles.camera}>
             <CameraIcon />
