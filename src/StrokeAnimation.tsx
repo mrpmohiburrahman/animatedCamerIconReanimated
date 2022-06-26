@@ -10,11 +10,12 @@ import Animated, {
 import Svg, { Circle, Path } from "react-native-svg";
 
 import CameraIcon from "./CameraIcon";
+
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 const StrokeAnimation = () => {
   const progress = useSharedValue(0);
-  const scaleCamera = useSharedValue(1);
+  const scaleCamera = useSharedValue(0);
 
   const [lengthForTop, setLengthForTop] = useState(0);
   const [lengthForBottom, setLengthForBottom] = useState(0);
@@ -24,11 +25,11 @@ const StrokeAnimation = () => {
   const refBottom = useRef<Path>(null);
 
   const animatedProps = {
-    forBottom: useAnimatedProps(() => ({
-      strokeDashoffset: lengthForBottom - lengthForBottom * progress.value,
-    })),
     forTop: useAnimatedProps(() => ({
       strokeDashoffset: lengthForTop - lengthForTop * progress.value,
+    })),
+    forBottom: useAnimatedProps(() => ({
+      strokeDashoffset: lengthForBottom - lengthForBottom * progress.value,
     })),
   };
 
@@ -66,7 +67,7 @@ const StrokeAnimation = () => {
                 stroke="#C2071E"
                 strokeWidth="32"
                 d="M346,405L0,0"
-                strokeDasharray={lengthForTop} // change here
+                strokeDasharray={lengthForTop}
                 animatedProps={animatedProps.forTop}
                 ref={refTop}
                 onLayout={() =>
